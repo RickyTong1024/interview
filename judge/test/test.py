@@ -2,6 +2,29 @@ import _judger
 import sys
 import os
 
+def do_ct():
+    if os.system("gcc ../execute/c/main.c -o ../execute/c/main"):
+        print("compile error")
+        exit(1)
+
+    ret = _judger.run(max_cpu_time=1000,
+                      max_real_time=2000,
+                      max_memory=128 * 1024 * 1024,
+                      max_process_number=200,
+                      max_output_size=10000,
+                      max_stack=32 * 1024 * 1024,
+                      exe_path="../execute/c/main",
+                      input_path="../execute/1.in",
+                      output_path="../execute/1.out",
+                      error_path="../execute/1.error",
+                      args=[],
+                      env=[],
+                      log_path="../execute/judger.log",
+                      seccomp_rule_name="c_cpp",
+                      uid=0,
+                      gid=0)
+    print(ret)
+    
 def do_c():
     if os.system("gcc c/main.c -o c/main"):
         print("compile error")
@@ -157,3 +180,5 @@ if __name__ == '__main__':
             do_py2()
         elif cmd == 'py3':
             do_py3()
+        elif cmd == 'ct':
+            do_ct()
