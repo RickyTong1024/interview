@@ -2,6 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
+		<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 		{% load bootstrap3 %}
 		{% bootstrap_css %}
 		{% bootstrap_javascript %}
@@ -14,4 +15,11 @@
 		{% block mainbody %}
 		{% endblock %}
 	</body>
+	<script type="text/javascript">
+	function getQueryString(name) {
+		 var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+		 var r = window.location.search.substr(1).match(reg);
+		 if(r!=null)return  unescape(r[2]); return null;
+	}
+	</script>
 </html>

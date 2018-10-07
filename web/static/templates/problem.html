@@ -1,0 +1,70 @@
+{%extends "templates/base.html" %}
+{% block mainbody %}
+<div class="container">
+	<div class="row">
+		<h1>{{ problem.title }}</h1>
+		<p>{{ problem.description }}</p>
+	</div>
+	<div class="row">
+		<div class="form-group">
+			<label for="name">Language</label>
+			<select class="form-control" id="language">
+				{% for language in problem.languages.all %}
+				<option value="{{ language.lname }}">{{ language.name }}</option>
+				{% endfor %}
+			</select>
+		</div>
+		<div class="form-group">
+			<div>
+				<textarea class="form-control" rows="16" id="code"></textarea>
+			</div>
+		</div>
+		<div class="form-group">
+			<button type="submit" class="btn btn-default" id="submit">提交</button>
+		</div>
+		<pre id="result"></pre>
+	</div>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	$.ajaxSetup({
+		data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+	});
+	$("#result").hide();
+	$("#language").change(get_lang);
+	$("#submit").click(submit);
+	get_lang();
+});
+
+function get_lang() {
+	$.ajax({
+		type: "POST",
+		url: "/problem_language/",
+		data: {
+			"problem_id":getQueryString("problem_id"),
+			"lang":$("#language").val()
+		},
+		success: function(data){
+			document.getElementById("code").innerHTML = data;
+		}
+	});
+}
+
+function submit() {
+	$.ajax({
+		type: "POST",
+		url: "/problem_submit/",
+		data: {
+			"problem_id":getQueryString("problem_id"),
+			"lang":$("#language").val(),
+			"code":$("#code").val()
+		},
+		success: function(data){
+			$("#result").show();
+			document.getElementById("result").innerHTML = data;
+		}
+	});
+}
+</script>
+{% endblock %}
