@@ -1,0 +1,63 @@
+{%extends "templates/base.html" %}
+{% block mainbody %}
+<form role="form">
+    <div class="form-group">
+        <label for="name">title</label>
+        <input type="text" class="form-control" id="title">
+    </div>
+	<div class="form-group">
+        <label for="name">description</label>
+        <textarea class="form-control" rows="8" id="description"></textarea>
+    </div>
+	<div class="form-group">
+        <label for="name">时间限制ms</label>
+        <input type="text" class="form-control" id="time_limit">
+    </div>
+	<div class="form-group">
+        <label for="name">内存限制mb</label>
+        <input type="text" class="form-control" id="memory_limit">
+    </div>
+	<div class="form-group">
+        <label for="name">difficulty</label>
+		<select class="form-control" id="difficulty">
+			<option>Easy</option>
+			<option>Normal</option>
+			<option>Hard</option>
+		</select>
+    </div>
+	<div class="form-group">
+        <label for="name">tags</label>
+		<div>
+			<label class="checkbox-inline">
+				<input type="checkbox" id="tag1" value="option1"> 选项 1
+			</label>
+			<label class="checkbox-inline">
+				<input type="checkbox" id="tag2" value="option2"> 选项 2
+			</label>
+			<label class="checkbox-inline">
+				<input type="checkbox" id="tag3" value="option3"> 选项 3
+			</label>
+		</div>
+		<input type="text" class="form-control" id="tag_add">
+    </div>
+	<div class="form-group">
+        <label for="name">languages</label>
+		<div>
+			<label class="checkbox-inline">
+				<input type="checkbox" id="language1" value="option1"> 选项 1
+			</label>
+			<label class="checkbox-inline">
+				<input type="checkbox" id="language2" value="option2"> 选项 2
+			</label>
+			<label class="checkbox-inline">
+				<input type="checkbox" id="language3" value="option3"> 选项 3
+			</label>
+		</div>
+    </div>
+	<div class="form-group">
+		<label for="inputfile">文件输入</label>
+		<input type="file" id="inputfile">
+	</div>
+	<button type="submit" class="btn btn-default">提交</button>
+</form>
+{% endblock %}
