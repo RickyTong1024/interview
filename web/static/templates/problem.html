@@ -1,32 +1,74 @@
 {%extends "templates/base.html" %}
-{% block mainbody %}
-<div class="container">
-	<div class="row">
-		<h1>{{ problem.title }}</h1>
-		<p>{{ problem.description }}</p>
+{% block page %}
+<div class="row">
+	<div class="col-xs-12 col-sm-7">
+		<div class="row">
+			<div class="col-xs-12 col-sm-6">
+				<h2>{{ problem.title }}</h2>
+			</div>
+			<div class="col-xs-12 col-sm-6">
+				<label>Tags</label>
+				<br>
+				{% for tag in problem.tags.all %}
+				<span class="label label-default">{{ tag.name }}</span>
+				{% endfor %}
+			</div>
+		</div>
 	</div>
+	<div class="col-xs-12 col-sm-5">
+		<div class="row">
+			<div class="col-xs-12 col-sm-4">
+				<label>Difficulty</label>
+				<br>
+				<p class="text-primary">{{ problem.difficulty.name }}<p/>
+			</div>
+			<div class="col-xs-12 col-sm-4">
+				<label>Time Limit</label>
+				<br>
+				<p class="text-primary">{{ problem.time_limit }}ms<p/>
+			</div>
+			<div class="col-xs-12 col-sm-4">
+				<label>Memory Limit</label>
+				<br>
+				<p class="text-primary">{{ problem.memory_limit }}MB<p/>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block mainbody %}
+<p>{{ problem.description }}</p>
+<label for="name">Language</label>
+<div class="form-group">
 	<div class="row">
-		<div class="form-group">
-			<label for="name">Language</label>
+		<div class="col-xs-12 col-sm-4">
 			<select class="form-control" id="language">
 				{% for language in problem.languages.all %}
 				<option value="{{ language.lname }}">{{ language.name }}</option>
 				{% endfor %}
 			</select>
 		</div>
-		<div class="form-group">
-			<div>
-				<textarea class="form-control" rows="16" id="code"></textarea>
-			</div>
+		<div class="col-xs-12 col-sm-4 pull-right text-right">
+			<button class="btn btn-primary" id="reset">reset code</button>
 		</div>
-		<div class="form-group">
-			<button type="submit" class="btn btn-default" id="submit">提交</button>
-		</div>
-		<pre id="result"></pre>
 	</div>
+</div>
+<div class="form-group">
+	<div>
+		<textarea class="form-control" rows="16" id="code"></textarea>
+	</div>
+</div>
+<div class="form-group">
+	<button type="submit" class="btn btn-primary btn-lg" id="submit">submit</button>
+</div>
+<div class="form-group">
+	<pre id="result"></pre>
 </div>
 
 <script type="text/javascript">
+var timer;
+var submission_id;
 $(document).ready(function() {
 	$.ajaxSetup({
 		data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
@@ -34,6 +76,7 @@ $(document).ready(function() {
 	$("#result").hide();
 	$("#language").change(get_lang);
 	$("#submit").click(submit);
+	$("#reset").click(get_lang);
 	get_lang();
 });
 
@@ -51,7 +94,64 @@ function get_lang() {
 	});
 }
 
+function get_submit_data(data) {
+	var result = JSON.parse(data);
+	submission_id = result['id'];
+	var state = result["state"];
+	var res = result["res"];
+	var cpu = result["cpu"];
+	var memory = result["memory"];
+	
+	if (state == 0)
+	{
+		return "PENDING PLEASE WAIT...";
+	}
+	else if (state == 1)
+	{
+		return "JUAGING PLEASE WAIT...";
+	}
+	else
+	{
+		var s = "";
+		if (res == -2)
+		{
+			s = s + "COMPILE_ERROR";
+		}
+		else if (res == -1)
+		{
+			s = s + "WRONG_ANSWER";
+		}
+		else if (res == 0)
+		{
+			s = s + "ACCEPTED";
+		}
+		else if (res == 1)
+		{
+			s = s + "TIME_LIMIT_EXCEEDED";
+		}
+		else if (res == 2)
+		{
+			s = s + "REAL_TIME_LIMIT_EXCEEDED";
+		}
+		else if (res == 3)
+		{
+			s = s + "MEMORY_LIMIT_EXCEEDED";
+		}
+		else if (res == 4)
+		{
+			s = s + "RUNTIME_ERROR";
+		}
+		else
+		{
+			s = s + "SYSTEM_ERROR";
+		}
+		s = s + "\n\nCPU:" + cpu + "    MEMORY:" + memory / 1024 + "k";
+		return s;
+	}
+}
+
 function submit() {
+	window.clearTimeout(timer);
 	$.ajax({
 		type: "POST",
 		url: "/problem_submit/",
@@ -62,7 +162,31 @@ function submit() {
 		},
 		success: function(data){
 			$("#result").show();
-			document.getElementById("result").innerHTML = data;
+			var result = get_submit_data(data);
+			document.getElementById("result").innerHTML = result;
+			if (data["state"] != 2)
+			{
+				timer = window.setTimeout(view_submission, 3000);
+			}
+		}
+	});
+}
+
+function view_submission() {
+	$.ajax({
+		type: "POST",
+		url: "/problem_view_submit/",
+		data: {
+			"submission_id":submission_id
+		},
+		success: function(data){
+			$("#result").show();
+			var result = get_submit_data(data);
+			document.getElementById("result").innerHTML = result;
+			if (data["state"] != 2)
+			{
+				timer = window.setTimeout(view_submission, 3000);
+			}
 		}
 	});
 }

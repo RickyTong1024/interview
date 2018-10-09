@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-	'bootstrap3',
+    'bootstrap3',
+    'djcelery',
 
     "interview",
 ]
@@ -128,3 +129,6 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, '/static/')
 
 TEST_CASE_DIR = os.path.join(BASE_DIR, 'test_case/')
+JUDGE_SERVER = 'http://47.99.138.90:8080/'
+
+BROKER_URL= 'redis://47.99.138.90:6379/2'

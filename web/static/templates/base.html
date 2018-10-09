@@ -11,9 +11,43 @@
 		<!--link href="../signin.css" rel="stylesheet"-->
 		<link href="https://v3.bootcss.com/examples/signin/signin.css" rel="stylesheet">
 	</head>
-	<body>
-		{% block mainbody %}
-		{% endblock %}
+	<body style="background: #f6f6f6;">
+		<nav class="navbar navbar-default navbar-fixed-top" style="background: #016fad;">
+			<div class="container">
+				<style type="text/css">
+				</style>
+				<ul class="nav navbar-nav navbar-right">
+					{% if user %}
+					<li><a href="/" style="color: #ffffff; background-color: transparent;">Examination</a></li>
+					<li><a href="/problem_list" style="color: #ffffff; background-color: transparent;">Problem</a></li>
+					{% if user.is_staff %}
+					<li><a href="/assignment" style="color: #ffffff; background-color: transparent;">Assignment</a></li>
+					{% endif %}
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" style="color: #ffffff; background-color: transparent;">
+							hi, {{ user.username }} <b class="caret"></b>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="/logout">logout</a></li>
+						</ul>
+					</li>
+					{% endif %}
+				</ul>
+			</div>
+		</nav>
+			
+		<div class="container" style="margin-top:30px">
+			{% if page %}
+			<h2>{{ page }}</h2>
+			{% else %}
+			{% block page %}
+			{% endblock %}
+			{% endif %}
+			
+			<hr style="background: #b6e1fb; border-color: #b6e1fb;"/>
+			{% block mainbody %}
+			{% endblock %}
+		</div>
 	</body>
 	<script type="text/javascript">
 	function getQueryString(name) {

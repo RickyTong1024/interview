@@ -1,10 +1,39 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from interview.models import *
-import os, shutil
+import os, shutil,json
 import random
 import zipfile
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout as django_logout
+from interview.forms import *
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+def login(request):
+    if request.method == "POST":
+        form = LoginForm(request=request,data=request.POST)
+        if form.is_valid():
+            return redirect('/')
+    else:
+        form = LoginForm()
+        if request.user.is_authenticated:
+            return redirect('/')
+
+    return render(request, 'templates/login.html',
+                  {'page':'Login',
+                   'form':form})
+
+def logout(request):
+    django_logout(request)
+    return redirect('/')
+
+@login_required(login_url="/login/")
+def index(request):
+    request.session.set_expiry(10800)
+    return render(request, 'templates/index.html',
+                  {"page":'Examinations',
+                   "user":request.user})
 
 def rand_str(length=32):
     s = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
@@ -40,13 +69,15 @@ def problem_update(request):
         pm_langs = []
         for lang in pm.languages.all():
             pm_langs.append(lang.id)
-        return render(request, 'templates/problem_update.html', {'problem_id' : _problem_id,
-                                                                 'problem' : pm,
-                                                                 'problem_tags' : pm_tags,
-                                                                 'problem_languages' : pm_langs,
-                                                                 'difficulties' : difs,
-                                                                 'tags' : tags,
-                                                                 'languages' : langs})
+        return render(request, 'templates/problem_update.html',
+                      {'page':'Problem Update',
+                       'problem_id' : _problem_id,
+                       'problem' : pm,
+                       'problem_tags' : pm_tags,
+                       'problem_languages' : pm_langs,
+                       'difficulties' : difs,
+                       'tags' : tags,
+                       'languages' : langs})
 
     else:
         _problem_id = request.POST.get('problem_id', None)
@@ -102,15 +133,57 @@ def problem_update(request):
             os.remove(zip_file)
 
         return redirect('/problem_list')
-    
-def problem_list(request):
-    return HttpResponse("problem_list")
 
+def deal_page(obj, page):
+    paginator = Paginator(obj, 25)
+    try:
+        contacts = paginator.page(page)
+    except PageNotAnInteger:
+        contacts = paginator.page(1)
+    except EmptyPage:
+        contacts = paginator.page(paginator.num_pages)
+
+    start_page_tab = contacts.number - 2
+    end_page_tab = contacts.number + 2
+
+    if start_page_tab < 1:
+        start_page_tab = 1
+        end_page_tab = 5
+
+    if end_page_tab > paginator.num_pages:
+        start_page_tab = paginator.num_pages - 4
+        end_page_tab = paginator.num_pages
+
+    if start_page_tab < 1:
+        start_page_tab = 1
+
+    page_list = []
+    for i in range(start_page_tab, end_page_tab + 1):
+        page_list.append(i)
+
+    return contacts, page_list
+
+@login_required(login_url="/login/")  
+def problem_list(request):
+    request.session.set_expiry(10800)
+    if request.method == 'GET':
+        _page = request.GET.get('page', 1)
+        pms = problem_model.objects.all()
+        contacts, page_list = deal_page(pms, _page)
+        return render(request, 'templates/problem_list.html',
+                          {'user' : request.user,
+                           'contacts': contacts,
+                           'page_list' : page_list})
+
+@login_required(login_url="/login/")
 def problem(request):
+    request.session.set_expiry(10800)
     if request.method == 'GET':
         _problem_id = request.GET.get('problem_id', None)
         pm = problem_model.objects.get(id=_problem_id)
-        return render(request, 'templates/problem.html', {'problem' : pm})
+        return render(request, 'templates/problem.html',
+                      {'user' : request.user,
+                       'problem' : pm})
 
 
 def problem_language(request):
@@ -125,10 +198,68 @@ def problem_language(request):
             c = f.read()
         return HttpResponse(c)
 
+def get_submission_json(sm):
+    res = {}
+    if sm == None:  
+        res["id"] = -1
+        res["state"] = -1
+        res["res"] = 5
+        res["cpu"] = 0
+        res["memory"] = 0
+    else:
+        res["id"] = sm.id
+        res["state"] = sm.state
+        res["res"] = sm.res
+        res["cpu"] = sm.cpu
+        res["memory"] = sm.memory
+    return json.dumps(res)
+
+@login_required(login_url="/login/")
 def problem_submit(request):
+    request.session.set_expiry(10800)
     if request.method == 'POST':
+        _user_id = request.user.id
         _problem_id = request.POST.get('problem_id', None)
+        _examination_sub_id = request.POST.get('examination_sub_id', 0)
         _lang = request.POST.get('lang', None)
         _code = request.POST.get('code', None)
-        
-        return HttpResponse("problem_submit")
+
+        if not _problem_id or not _lang or not _lang or not _code:
+            sm = None
+        else:
+            sm = submission_model.objects.create(user_id = _user_id,
+                                                 problem_id=_problem_id,
+                                                 examination_sub_id=_examination_sub_id,
+                                                 language=_lang,
+                                                 code=_code,
+                                                 state=0)        
+        return HttpResponse(get_submission_json(sm))
+
+@login_required(login_url="/login/")
+def problem_view_submit(request):
+    request.session.set_expiry(10800)
+    if request.method == 'POST':
+        _submission_id = request.POST.get('submission_id', None)
+        sm = submission_model.objects.filter(id=_submission_id).first()
+        return HttpResponse(get_submission_json(sm))
+
+@login_required(login_url="/login/")  
+def assignment(request):
+    request.session.set_expiry(10800)
+    if not request.user.is_staff:
+        return redirect('/')
+    return HttpResponse("assignment")
+
+@login_required(login_url="/login/")  
+def create_account(request):
+    request.session.set_expiry(10800)
+    if not request.user.is_staff:
+        return redirect('/')
+    return HttpResponse("create_account")
+
+@login_required(login_url="/login/")  
+def create_examination(request):
+    request.session.set_expiry(10800)
+    if not request.user.is_staff:
+        return redirect('/')
+    return HttpResponse("create_examination")

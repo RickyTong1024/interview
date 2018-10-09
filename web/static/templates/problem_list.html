@@ -1,0 +1,24 @@
+{%extends "templates/base.html" %}
+{% block mainbody %}
+<ul class="pagination">
+	{% if contacts.has_previous %}
+		<li class="previous"><a href="/problem_list/?page={{ contacts.previous_page_number }}">&laquo;</a></li>
+	{% else %}
+		<li class="previous disabled"><a href="#">&laquo;</a></li>
+	{% endif %}
+
+	{% for num in page_list %}
+		{% if num == contacts.number %}
+			<li class="item active"><a href="#">{{ num }}</a></li>
+		{% else %}
+			<li class="item"><a href="/problem_list/?page={{ num }}">{{ num }}</a></li>
+		{% endif %}
+	{% endfor %}
+
+	{% if contacts.has_next %}
+		<li class="next"><a href="/problem_list/?page={{ contacts.next_page_number }}">&raquo;</a></li>
+	{% else %}
+		<li class="next disabled"><a href="#">&raquo;</a></li>
+	{% endif %}
+</ul>
+{% endblock %}
