@@ -1,82 +1,100 @@
 {%extends "templates/base.html" %}
-{% block page %}
+{% block page_head %}
+{% if in_exam == 1 %}
+<a href="/examination?examination_id={{ examination.id }}">返回上级</a>
+{% else %}
+<a href="/problem_list">返回上级</a>
+{% endif %}
+{% endblock %}
+
+{% block page_left %}
 <div class="row">
-	<div class="col-xs-12 col-sm-7">
-		<div class="row">
-			<div class="col-xs-12 col-sm-6">
-				<h2>{{ problem.title }}</h2>
-			</div>
-			<div class="col-xs-12 col-sm-6">
-				<label>Tags</label>
-				<br>
-				{% for tag in problem.tags.all %}
-				<span class="label label-default">{{ tag.name }}</span>
-				{% endfor %}
-			</div>
-		</div>
+	<div class="col-sm-6">
+		<h2>{{ problem.title }}</h2>
 	</div>
-	<div class="col-xs-12 col-sm-5">
-		<div class="row">
-			<div class="col-xs-12 col-sm-4">
-				<label>Difficulty</label>
-				<br>
-				<p class="text-primary">{{ problem.difficulty.name }}<p/>
-			</div>
-			<div class="col-xs-12 col-sm-4">
-				<label>Time Limit</label>
-				<br>
-				<p class="text-primary">{{ problem.time_limit }}ms<p/>
-			</div>
-			<div class="col-xs-12 col-sm-4">
-				<label>Memory Limit</label>
-				<br>
-				<p class="text-primary">{{ problem.memory_limit }}MB<p/>
-			</div>
-		</div>
+	<div class="col-sm-6">
+		<label>标签</label>
+		<br>
+		{% for tag in problem.tags.all %}
+		<span class="label label-default">{{ tag.name }}</span>
+		{% endfor %}
+	</div>
+</div>
+{% endblock %}
+{% block page_right %}
+<div class="row">
+	<div class="col-sm-4">
+		<label>难度</label>
+		<br>
+		<p class="text-primary">{{ problem.difficulty.name }}<p/>
+	</div>
+	<div class="col-sm-4">
+		<label>时间限制</label>
+		<br>
+		<p class="text-primary">{{ problem.time_limit }}ms<p/>
+	</div>
+	<div class="col-sm-4">
+		<label>内存限制</label>
+		<br>
+		<p class="text-primary">{{ problem.memory_limit }}MB<p/>
 	</div>
 </div>
 {% endblock %}
 
 {% block mainbody %}
-<p>{{ problem.description }}</p>
-<label for="name">Language</label>
+<div class="form-group" id="description">
+{{ problem.description |safe }}
+</div>
 <div class="form-group">
 	<div class="row">
-		<div class="col-xs-12 col-sm-4">
+		<div class="col-sm-3">
 			<select class="form-control" id="language">
 				{% for language in problem.languages.all %}
 				<option value="{{ language.lname }}">{{ language.name }}</option>
 				{% endfor %}
 			</select>
 		</div>
-		<div class="col-xs-12 col-sm-4 pull-right text-right">
-			<button class="btn btn-primary" id="reset">reset code</button>
+		<div class="col-sm-3">
+			<button class="btn btn-primary" onclick="get_lang();">重置</button>
 		</div>
 	</div>
 </div>
 <div class="form-group">
 	<div>
-		<textarea class="form-control" rows="16" id="code"></textarea>
+		<textarea class="form-control" id="code"></textarea>
 	</div>
 </div>
 <div class="form-group">
-	<button type="submit" class="btn btn-primary btn-lg" id="submit">submit</button>
+	<button class="btn btn-primary btn-lg" onclick="submit();">提交</button>
 </div>
 <div class="form-group">
 	<pre id="result"></pre>
 </div>
+{% endblock %}
 
+{% block script %}
+<link rel="stylesheet" href="/static/codemirror/codemirror.css">
+<script src="/static/codemirror/codemirror.js"></script>
+<script src="/static/codemirror/python.js"></script>
+<script src="/static/codemirror/clike.js"></script>
+<script src="/static/codemirror/matchbrackets.js"></script>
 <script type="text/javascript">
 var timer;
 var submission_id;
+var editor;
 $(document).ready(function() {
 	$.ajaxSetup({
 		data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
 	});
+	var code = document.getElementById("code");
+	editor = CodeMirror.fromTextArea(code, {
+		lineNumbers: true,
+		matchBrackets: true,
+		indentUnit:4,
+		indentWithTabs: true,
+	});
 	$("#result").hide();
 	$("#language").change(get_lang);
-	$("#submit").click(submit);
-	$("#reset").click(get_lang);
 	get_lang();
 });
 
@@ -89,7 +107,28 @@ function get_lang() {
 			"lang":$("#language").val()
 		},
 		success: function(data){
-			document.getElementById("code").innerHTML = data;
+			editor.setValue(data);
+			var l = $("#language").val();
+			if (l == "c")
+			{
+				editor.setOption("mode", "text/x-csrc");
+			}
+			else if (l == "cpp")
+			{
+				editor.setOption("mode", "text/x-c++src");
+			}
+			else if (l == "cs")
+			{
+				editor.setOption("mode", "text/x-csharp");
+			}
+			else if (l == "jav")
+			{
+				editor.setOption("mode", "text/x-java");
+			}
+			else
+			{
+				editor.setOption("mode", "text/x-python");
+			}
 		}
 	});
 }
@@ -104,50 +143,57 @@ function get_submit_data(data) {
 	
 	if (state == 0)
 	{
-		return "PENDING PLEASE WAIT...";
+		return "队列中 请等待...";
 	}
 	else if (state == 1)
 	{
-		return "JUAGING PLEASE WAIT...";
+		return "验证中 请等待...";
 	}
 	else
 	{
 		var s = "";
 		if (res == -2)
 		{
-			s = s + "COMPILE_ERROR";
+			s = s + "编译错误";
 		}
 		else if (res == -1)
 		{
-			s = s + "WRONG_ANSWER";
+			s = s + "答案错误";
 		}
 		else if (res == 0)
 		{
-			s = s + "ACCEPTED";
+			s = s + "答案正确";
 		}
 		else if (res == 1)
 		{
-			s = s + "TIME_LIMIT_EXCEEDED";
+			s = s + "运行超时";
 		}
 		else if (res == 2)
 		{
-			s = s + "REAL_TIME_LIMIT_EXCEEDED";
+			s = s + "运行超时";
 		}
 		else if (res == 3)
 		{
-			s = s + "MEMORY_LIMIT_EXCEEDED";
+			s = s + "内存超界";
 		}
 		else if (res == 4)
 		{
-			s = s + "RUNTIME_ERROR";
+			s = s + "运行错误";
 		}
 		else
 		{
-			s = s + "SYSTEM_ERROR";
+			s = s + "系统错误";
 		}
-		s = s + "\n\nCPU:" + cpu + "    MEMORY:" + memory / 1024 + "k";
+		s = s + "\n\n运行时间:" + cpu + "ms    内存使用:" + memory / 1024 + "k";
 		return s;
 	}
+}
+
+function get_submit_state(data) {
+	var result = JSON.parse(data);
+	submission_id = result['id'];
+	var state = result["state"];
+	return state;
 }
 
 function submit() {
@@ -157,14 +203,16 @@ function submit() {
 		url: "/problem_submit/",
 		data: {
 			"problem_id":getQueryString("problem_id"),
+			"examination_sub_id":getQueryString("examination_sub_id"),
 			"lang":$("#language").val(),
-			"code":$("#code").val()
+			"code":editor.getValue()
 		},
 		success: function(data){
 			$("#result").show();
+			var state = get_submit_state(data);
 			var result = get_submit_data(data);
-			document.getElementById("result").innerHTML = result;
-			if (data["state"] != 2)
+			document.getElementById("result").innerText = result;
+			if (state != 2)
 			{
 				timer = window.setTimeout(view_submission, 3000);
 			}
@@ -181,10 +229,12 @@ function view_submission() {
 		},
 		success: function(data){
 			$("#result").show();
+			var state = get_submit_state(data);
 			var result = get_submit_data(data);
-			document.getElementById("result").innerHTML = result;
-			if (data["state"] != 2)
+			document.getElementById("result").innerText = result;
+			if (state != 2)
 			{
+				alert(state);
 				timer = window.setTimeout(view_submission, 3000);
 			}
 		}

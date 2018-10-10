@@ -1,0 +1,16 @@
+import java.io.*;
+import java.util.*;
+
+public class Palindrome {
+	public static int addDigits (int in_num) {
+
+	}
+    
+	public static void main(String[] args) throws IOException {
+		Scanner cin = new Scanner(System.in);
+		int in_num = cin.nextInt();
+		cin.close();
+		int out_num = addDigits(in_num);
+		System.out.println(out_num);
+	}
+}

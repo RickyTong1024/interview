@@ -1,4 +1,8 @@
 {%extends "templates/base.html" %}
+{% block page_left %}
+<h2>登录</h2>
+{% endblock %}
+
 {% block mainbody %}
 <form action="/login/" method="post">
 	{% csrf_token %}

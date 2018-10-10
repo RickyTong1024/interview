@@ -1,0 +1,12 @@
+# -*- coding: utf-8 -*-
+	
+def addDigits (in_num):
+	pass
+	
+def main():
+	in_num = raw_input()
+	out_num = addDigits(in_num)
+	print out_num
+
+if __name__ == '__main__':
+	main()

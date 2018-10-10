@@ -1,0 +1,47 @@
+<div class="panel panel-default">
+    <div class="panel-body">
+		<div class="row">
+			<div class="col-sm-4">
+				面试进行中
+			</div>
+			<div class="col-sm-4">
+				时间: <span id="time"></span>
+			</div>
+			<div class="col-sm-4">
+				得分: {{ examination.get_score }}%
+			</div>
+		</div>
+    </div>
+	<script>
+		var x = {{ examination.get_remain_time }};
+		setInterval(go,1000);
+		go();
+		function go() {
+			if (x >= 0){
+				var ts = "";
+				var h = parseInt(x / 3600);
+				if (h < 10)
+				{
+					ts += "0";
+				}
+				ts += h.toString() + ":";
+				var m = parseInt((x - h * 3600) / 60);
+				if (m < 10)
+				{
+					ts += "0";
+				}
+				ts += m.toString() + ":";
+				var s = x % 60;
+				if (s < 10)
+				{
+					ts += "0";
+				}
+				ts += s.toString();
+				document.getElementById("time").innerText = ts;
+			}else {
+				location.href="/";
+			}
+			x--;
+		}
+	</script>
+</div>

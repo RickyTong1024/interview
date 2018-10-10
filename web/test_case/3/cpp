@@ -1,0 +1,22 @@
+#include <iostream>
+
+using namespace std;
+
+class Palindrome
+{
+public :
+	static int addDigits(int in_num)
+	{
+	
+	}
+};
+
+int main()
+{
+	int in_num = 0;
+	cin >> in_num;
+	Palindrome palindrome;
+	int out_num = palindrome.addDigits(in_num);
+	cout << out_num << endl;
+	return 0;
+}

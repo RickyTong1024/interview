@@ -1,4 +1,36 @@
 {%extends "templates/base.html" %}
-{% block mainbody %}
+{% block page_left %}
+<h2>我的面试</h2>
+{% endblock %}
 
+{% block mainbody %}
+<table class="table">
+	<thead>
+		<tr>
+			<th>面试</th>
+			<th>时间</th>
+			<th>状态</th>
+			<th>得分</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for examination in contacts.object_list %}
+		<tr>
+			<th>
+				<a href="/examination/?examination_id={{ examination.id }}">{{ examination.name }}</a>
+			</th>
+			<th>{{ examination.start_time|date:"Y-m-d H:i:s" }} ({{ examination.duration }}分钟)</th>
+			{% if examination.get_state == 0 %}
+			<th>未开始</th>
+			{% elif examination.get_state == 1 %}
+			<th>进行中</th>
+			{% else %}
+			<th>已结束</th>
+			{% endif %}
+			<th>{{ examination.get_accept }}/{{ examination.get_total }} ({{ examination.get_score }}%)</th>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+{%include "templates/pagination.html" %}
 {% endblock %}

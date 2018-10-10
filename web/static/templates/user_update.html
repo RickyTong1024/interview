@@ -1,0 +1,46 @@
+{%extends "templates/base.html" %}
+{% block page_head %}
+<a href="/users">返回上级</a>
+{% endblock %}
+
+{% block page_left %}
+<h2>创建修改用户</h2>
+{% endblock %}
+
+{% block mainbody %}
+<form role="form" action="/user_update/" method="post" enctype="multipart/form-data">
+	{% csrf_token %}
+	{% if user_id %}
+	<input type="hidden" name="user_id" value="{{ user_id }}">
+	{% endif %}
+	<div class="form-group">
+		<label>用户名</label>
+		<input type="text" class="form-control" name="username" value="{{ muser.username }}">
+	</div>
+	<div class="form-group">
+		<label>密码</label>
+		{% if not user_id %}
+		<a href="#" onclick="random_pwd();">随机</a>
+		{% endif %}
+		<input type="text" class="form-control" name="password" id="password" value="">
+		{% if not user_id %}
+		<script type="text/javascript">
+		function random_pwd() {
+			var text = "0123456789";
+			var p = "";
+			var rand = function(min, max){return Math.floor(Math.max(min, Math.random() * (max+1)));}
+			for(i = 0; i < 6; ++i) 
+			{
+				p += text.charAt(rand(0, text.length - 1)); 
+			}
+			document.getElementById("password").value = p;
+		}
+		random_pwd();
+		</script>
+		{% endif %}
+	</div>
+	<div class="form-group">
+		<button type="submit" class="btn btn-primary btn-lg">提交</button>
+	</div>
+</form>
+{% endblock %}

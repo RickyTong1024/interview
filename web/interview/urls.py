@@ -11,7 +11,9 @@ urlpatterns = [
     path('problem_language/', views.problem_language, name = 'problem_language'),
     path('problem_submit/', views.problem_submit, name = 'problem_submit'),
     path('problem_view_submit/', views.problem_view_submit, name = 'problem_view_submit'),
-    path('assignment/', views.assignment, name = 'assignment'),
-	path('create_account/', views.create_account, name = 'create_account'),
-	path('create_examination/', views.create_examination, name = 'create_examination'),
+    path('examinations/', views.examinations, name = 'examinations'),
+	path('examination_update/', views.examination_update, name = 'examination_update'),
+    path('users/', views.users, name = 'users'),
+	path('user_update/', views.user_update, name = 'user_update'),
+    path('examination/', views.examination, name = 'examination'),
 ]

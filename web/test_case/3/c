@@ -1,0 +1,16 @@
+#include <stdio.h>
+
+int addDigits (int in_num)
+{
+
+}
+
+
+int main()
+{
+	int in_num;
+	scanf("%d", &in_num);
+	int out_num = addDigits(in_num);
+	printf("%d\n", out_num);
+	return 0;
+}

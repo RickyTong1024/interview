@@ -1,68 +1,101 @@
 {%extends "templates/base.html" %}
-{% block mainbody %}
+{% block page_head %}
+<a href="/problem_list">返回上级</a>
+{% endblock %}
+			
+{% block page_left %}
+<h2>创建修改题目</h2>
+{% endblock %}
+
+{% block page_right %}
 <div class="row">
-	<form role="form" action="/problem_update/" method="post" enctype="multipart/form-data">
-		{% csrf_token %}
-		{% if problem_id %}
-		<input type="hidden" name="problem_id" value="{{ problem_id }}">
-		{% endif %}
-		<div class="form-group">
-			<label for="name">title</label>
-			<input type="text" class="form-control" name="title" value="{{ problem.title }}">
-		</div>
-		<div class="form-group">
-			<label for="name">description</label>
-			<textarea class="form-control" rows="8" name="description">{{ problem.description }}</textarea>
-		</div>
-		<div class="form-group">
-			<label for="name">时间限制ms</label>
-			<input type="text" class="form-control" name="time_limit" value="{{ problem.time_limit }}">
-		</div>
-		<div class="form-group">
-			<label for="name">内存限制MB</label>
-			<input type="text" class="form-control" name="memory_limit" value="{{ problem.memory_limit }}">
-		</div>
-		<div class="form-group">
-			<label for="name">difficulty</label>
-			<select class="form-control" name="difficulty">
-				{% for dif in difficulties %}
-				<option value="{{ dif.id }}">{{ dif.name }}</option>
-				{% endfor %}
-			</select>
-		</div>
-		<div class="form-group">
-			<label for="name">tags</label>
-			<div>
-				{% for tag in tags %}
-				<label class="checkbox-inline">
-					<input type="checkbox" name="tags" value="{{ tag.id }}" {% if tag.id in problem_tags %}checked="checked"{% endif %}> {{ tag.name }}
-				</label>
-				{% endfor %}
-			</div>
-			<input type="text" class="form-control" name="tag_add">
-		</div>
-		<div class="form-group">
-			<label for="name">languages</label>
-			<div>
-				{% for language in languages %}
-				<label class="checkbox-inline">
-					<input type="checkbox" name="languages" value="{{ language.id }}" {% if language.id in problem_languages %}checked="checked"{% endif %}> {{ language.name }}
-				</label>
-				{% endfor %}
-			</div>
-		</div>
-		<div class="form-group">
-			<label for="inputfile">文件输入</label>
-			<input type="file" name="inputfile" accept=".zip">
-		</div>
-		<div class="form-group">
-			<div>
-				<input type="checkbox" name="can_exam" {% if problem.can_exam %}checked="checked"{% endif %}> 是否出现在测试中
-			</div>
-		</div>
-		<div class="form-group">
-			<button type="submit" class="btn btn-default">提交</button>
-		</div>
-	</form>
+	<div class="col-sm-4">
+		<label>难度</label>
+		<br>
+		<p class="text-primary">{{ problem.difficulty.name }}<p/>
+	</div>
+	<div class="col-sm-4">
+		<label>时间限制</label>
+		<br>
+		<p class="text-primary">{{ problem.time_limit }}ms<p/>
+	</div>
+	<div class="col-sm-4">
+		<label>内存限制</label>
+		<br>
+		<p class="text-primary">{{ problem.memory_limit }}MB<p/>
+	</div>
 </div>
+{% endblock %}
+
+{% block mainbody %}
+<form role="form" action="/problem_update/" method="post" enctype="multipart/form-data">
+	{% csrf_token %}
+	{% if problem_id %}
+	<input type="hidden" name="problem_id" value="{{ problem_id }}">
+	{% endif %}
+	<div class="form-group">
+		<label for="name">title</label>
+		<input type="text" class="form-control" name="title" value="{{ problem.title }}">
+	</div>
+	<div class="form-group">
+		<label for="name">description</label>
+		<script name="description" type="text/plain" id="container">
+			{{ problem.description | safe }}
+		</script>
+		<script type="text/javascript" src="/static/ueditor/ueditor.config.js"></script>
+		<script type="text/javascript" src="/static/ueditor/ueditor.all.js"></script>
+		<script type="text/javascript">
+		var ue = UE.getEditor('container');
+		</script>
+	</div>
+	<div class="form-group">
+		<label for="name">时间限制ms</label>
+		<input type="text" class="form-control" name="time_limit" value="{{ problem.time_limit }}">
+	</div>
+	<div class="form-group">
+		<label for="name">内存限制MB</label>
+		<input type="text" class="form-control" name="memory_limit" value="{{ problem.memory_limit }}">
+	</div>
+	<div class="form-group">
+		<label for="name">难度</label>
+		<select class="form-control" name="difficulty">
+			{% for dif in difficulties %}
+			<option value="{{ dif.id }}">{{ dif.name }}</option>
+			{% endfor %}
+		</select>
+	</div>
+	<div class="form-group">
+		<label>标签</label>
+		<div>
+			{% for tag in tags %}
+			<label class="checkbox-inline">
+				<input type="checkbox" name="tags" value="{{ tag.id }}" {% if tag.id in problem_tags %}checked="checked"{% endif %}> {{ tag.name }}
+			</label>
+			{% endfor %}
+		</div>
+		<input type="text" class="form-control" name="tag_add">
+	</div>
+	<div class="form-group">
+		<label>语言</label>
+		<div>
+			{% for language in languages %}
+			<label class="checkbox-inline">
+				<input type="checkbox" name="languages" value="{{ language.id }}" {% if language.id in problem_languages %}checked="checked"{% endif %}> {{ language.name }}
+			</label>
+			{% endfor %}
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="inputfile">文件输入</label>
+		<input type="file" name="inputfile" accept=".zip">
+	</div>
+	<div class="form-group">
+		<div>
+			<input type="checkbox" name="can_exam" {% if problem.can_exam %}checked="checked"{% endif %}> 是否出现在测试中
+		</div>
+	</div>
+	<div class="form-group">
+		<button type="submit" class="btn btn-primary btn-lg">提交</button>
+	</div>
+</form>
 {% endblock %}

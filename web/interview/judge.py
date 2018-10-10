@@ -52,11 +52,10 @@ def judge():
         if problem:
             problem.add_submission_number()
             if sm.res == 0:
-                problem.add_ac_number()
-                
+                problem.add_ac_number()       
         examination_sub = examination_sub_model.objects.filter(id=sm.examination_sub_id).first()
         if examination_sub:
-            examination_sub.add_submission_number()
+            examination_sub.submissions.add(sm)
             if examination_sub.result != 0 and sm.res == 0:
                 examination_sub.result = 0
-                examination_sub.save(update_fields=["result"])
+            examination_sub.save()

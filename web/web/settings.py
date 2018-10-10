@@ -25,7 +25,7 @@ SECRET_KEY = 'rcq@(p@jfzhu5e1v0boyzb2c80tp!y&8=ffkr8o+om!6^fclp&'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -126,7 +126,12 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, '/static/')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static').replace('\\','/') 
+STATICFILES_DIRS = (
+    ("datetimepicker", os.path.join(STATIC_ROOT, 'datetimepicker').replace('\\','/')),
+	("codemirror", os.path.join(STATIC_ROOT, 'codemirror').replace('\\','/')),
+	("ueditor", os.path.join(STATIC_ROOT, 'ueditor').replace('\\','/')),
+)
 
 TEST_CASE_DIR = os.path.join(BASE_DIR, 'test_case/')
 JUDGE_SERVER = 'http://47.99.138.90:8080/'

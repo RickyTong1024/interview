@@ -1,0 +1,46 @@
+{%extends "templates/base.html" %}
+{% block page_left %}
+<h2>用户管理</h2>
+{% endblock %}
+
+{% block page_right %}
+<div class="row">
+	<div class="col-sm-4 pull-right stacked-right">
+		<button class="btn btn-primary btn-lg"  onclick="window.location.href = '/user_update'">新建</button>
+	</div>
+</div>
+{% endblock %}
+
+{% block mainbody %}
+<table class="table">
+	<thead>
+		<tr>
+			<th>用户名</th>
+			<th>管理员</th>
+			<th>超级管理员</th>
+			<th>操作</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for user in contacts.object_list %}
+		<tr>
+			<th>{{ user.username }}</th>
+			{% if user.is_staff == 1 %}
+			<th>Yes</th>
+			{% else %}
+			<th>No</th>
+			{% endif %}
+			{% if user.is_superuser == 1 %}
+			<th>Yes</th>
+			{% else %}
+			<th>No</th>
+			{% endif %}
+			<th>
+				<a href="/user_update/?user_id={{ user.id }}">修改</a>
+			</th>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+{%include "templates/pagination.html" %}
+{% endblock %}

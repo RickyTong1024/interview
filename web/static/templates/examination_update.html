@@ -1,0 +1,52 @@
+{%extends "templates/base.html" %}
+{% block page_head %}
+<a href="/examinations">返回上级</a>
+{% endblock %}
+
+{% block page_left %}
+<h2>创建修改面试</h2>
+{% endblock %}
+
+{% block mainbody %}
+<form role="form" action="/examination_update/" method="post" enctype="multipart/form-data">
+	{% csrf_token %}
+	{% if examination_id %}
+	<input type="hidden" name="examination_id" value="{{ examination_id }}">
+	{% endif %}
+	<div class="form-group">
+		<label>用户名</label>
+		<input type="text" class="form-control" name="username" value="{% if muser %}{{ muser.username }}{% endif %}">
+	</div>
+	<div class="form-group">
+		<label>标题</label>
+		<input type="text" class="form-control" name="name" value="{{ examination.name }}">
+	</div>
+	<div class="form-group">
+		<label>开始时间</label>
+		<input type="text" class="form-control" name="start_time" id="start_time" value="{% if examination.start_time %}{{ examination.start_time|date:"Y-m-d H:i:s" }}{% endif %}">
+	</div>
+	<div class="form-group">
+		<label>持续时间（分钟）</label>
+		<input type="text" class="form-control" name="duration" value="{{ examination.duration }}">
+	</div>
+	<div class="form-group">
+		<button type="submit" class="btn btn-primary btn-lg">提交</button>
+	</div>
+</form>
+{% endblock %}
+
+{% block script %}
+<link href="/static/datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+<script type="text/javascript" src="/static/datetimepicker/bootstrap-datetimepicker.js"></script>
+<script type="text/javascript" src="/static/datetimepicker/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	$('#start_time').datetimepicker({
+		language:  'zh-CN',
+		format: 'yyyy-mm-dd hh:ii',
+        todayBtn:  1,
+        todayHighlight: 1,
+	});
+});
+</script>
+{% endblock %}

@@ -1,0 +1,40 @@
+{%extends "templates/base.html" %}
+{% block page_head %}
+<a href="/">返回上级</a>
+{% endblock %}
+
+{% block page_left %}
+<h2>{{ examination.name }}</h2>
+{% endblock %}
+
+{% block mainbody %}
+<table class="table">
+	<thead>
+		<tr>
+			<th>题目</th>
+			<th>标签</th>
+			<th>难度</th>
+			<th>提交</th>
+			<th>状态</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for sub in contacts.object_list %}
+		<tr>
+			<th>
+				<a href="/problem/?problem_id={{ sub.get_problem.id }}&examination_sub_id={{ sub.id }}&examination_id={{ examination.id }}">{{ sub.get_problem.title }}</a>
+			</th>
+			<th>
+				{% for tag in sub.get_problem.tags.all %}
+				<span class="label label-default">{{ tag.name }}</span>
+				{% endfor %}
+			</th>
+			<th>{{ sub.get_problem.difficulty.name }}</th>
+			<th>{{ sub.get_total_submission }}</th>
+			<th>{% if sub.result == 0 %}Yes{% else %}No{% endif %}</th>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+{%include "templates/pagination.html" %}
+{% endblock %}

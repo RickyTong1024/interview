@@ -1,0 +1,17 @@
+using System;
+
+public class Palindrome
+{
+	public static int addDigits(int num)
+	{
+
+	}
+
+	public static void Main(string[] args)
+	{
+		string s = Console.ReadLine();
+		int in_num = int.Parse(s);
+		int out_num = addDigits(in_num);
+		Console.WriteLine(out_num);
+	}
+}

@@ -1,0 +1,48 @@
+{%extends "templates/base.html" %}
+{% block page_left %}
+<h2>面试管理</h2>
+{% endblock %}
+
+{% block page_right %}
+<div class="row">
+	<div class="col-sm-4 pull-right stacked-right">
+		<button class="btn btn-primary btn-lg"  onclick="window.location.href = '/examination_update'">新建</button>
+	</div>
+</div>
+{% endblock %}
+
+{% block mainbody %}
+<table class="table">
+	<thead>
+		<tr>
+			<th>面试</th>
+			<th>用户</th>
+			<th>时间</th>
+			<th>状态</th>
+			<th>得分</th>
+			<th>操作</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for examination in contacts.object_list %}
+		<tr>
+			<th>{{ examination.name }}</th>
+			<th>{{ examination.get_user.username }}</th>
+			<th>{{ examination.start_time|date:"Y-m-d H:i:s" }} ({{ examination.duration }}分钟)</th>
+			{% if examination.get_state == 0 %}
+			<th>未开始</th>
+			{% elif examination.get_state == 1 %}
+			<th>进行中</th>
+			{% else %}
+			<th>已结束</th>
+			{% endif %}
+			<th>{{ examination.get_accept }}/{{ examination.get_total }} ({{ examination.get_score }}%)</th>
+			<th>
+				<a href="/examination_update/?examination_id={{ examination.id }}">修改</a>
+			</th>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+{%include "templates/pagination.html" %}
+{% endblock %}

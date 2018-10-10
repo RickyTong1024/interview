@@ -1,24 +1,48 @@
 {%extends "templates/base.html" %}
+{% block page_left %}
+<h2>题目管理</h2>
+{% endblock %}
+
+{% block page_right %}
+<div class="row">
+	<div class="col-sm-4 pull-right stacked-right">
+		<button class="btn btn-primary btn-lg"  onclick="window.location.href = '/problem_update'">新建</button>
+	</div>
+</div>
+{% endblock %}
+
 {% block mainbody %}
-<ul class="pagination">
-	{% if contacts.has_previous %}
-		<li class="previous"><a href="/problem_list/?page={{ contacts.previous_page_number }}">&laquo;</a></li>
-	{% else %}
-		<li class="previous disabled"><a href="#">&laquo;</a></li>
-	{% endif %}
-
-	{% for num in page_list %}
-		{% if num == contacts.number %}
-			<li class="item active"><a href="#">{{ num }}</a></li>
-		{% else %}
-			<li class="item"><a href="/problem_list/?page={{ num }}">{{ num }}</a></li>
-		{% endif %}
-	{% endfor %}
-
-	{% if contacts.has_next %}
-		<li class="next"><a href="/problem_list/?page={{ contacts.next_page_number }}">&raquo;</a></li>
-	{% else %}
-		<li class="next disabled"><a href="#">&raquo;</a></li>
-	{% endif %}
-</ul>
+<table class="table">
+	<thead>
+		<tr>
+			<th>题目</th>
+			<th>标签</th>
+			<th>面试用</th>
+			<th>难度</th>
+			<th>AC & 提交</th>
+			<th>操作</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for problem in contacts.object_list %}
+		<tr>
+			<th>
+				<a href="/problem/?problem_id={{ problem.id }}">{{ problem.title }}</a>
+			</th>
+			<th>
+				{% for tag in problem.tags.all %}
+				<span class="label label-default">{{ tag.name }}</span>
+				{% endfor %}
+			</th>
+			<th>{% if problem.can_exam %}Yes{% else %}No{% endif %}</th>
+			<th>{{ problem.difficulty.name }}</th>
+			<th>{{ problem.accepted_number }}/{{ problem.submission_number }}</th>
+			<th>
+				<a href="/problem_update/?problem_id={{ problem.id }}">修改</a>
+			</th>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+{%include "templates/pagination.html" %}
 {% endblock %}
