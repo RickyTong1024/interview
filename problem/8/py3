@@ -1,0 +1,17 @@
+# -*- coding: utf-8 -*-
+
+class Solution(object):
+	def transfer(self, m, n):
+		pass
+
+def main():
+	in_s = input()
+	in_s = in_s.split()
+	m = int(in_s[0])
+	n = int(in_s[1])
+	solution = Solution()
+	out_num = solution.transfer(m, n)
+	print(out_num)
+
+if __name__ == '__main__':
+	main()

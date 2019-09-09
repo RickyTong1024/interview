@@ -1,0 +1,18 @@
+# -*- coding: utf-8 -*-
+	
+class Solution(object):
+	def stranger(self, nums):
+		pass
+	
+def main():
+	num = raw_input()
+	in_nums = raw_input()
+	in_nums = in_nums.split(' ')
+	for i in range(len(in_nums)):
+		in_nums[i] = int(in_nums[i])
+	solution = Solution()
+	out_num = solution.stranger(in_nums)
+	print out_num
+
+if __name__ == '__main__':
+	main()

@@ -126,14 +126,12 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static').replace('\\','/') 
-STATICFILES_DIRS = (
-    ("datetimepicker", os.path.join(STATIC_ROOT, 'datetimepicker').replace('\\','/')),
-	("codemirror", os.path.join(STATIC_ROOT, 'codemirror').replace('\\','/')),
-	("ueditor", os.path.join(STATIC_ROOT, 'ueditor').replace('\\','/')),
-)
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'common_static')
+]
 
 TEST_CASE_DIR = os.path.join(BASE_DIR, 'test_case/')
-JUDGE_SERVER = 'http://47.99.138.90:8080/'
+JUDGE_SERVER = 'http://interview.yymoon.com:8080/'
 
-BROKER_URL= 'redis://47.99.138.90:6379/2'
+BROKER_URL= 'redis://interview.yymoon.com:6379/2'

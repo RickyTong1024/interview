@@ -1,0 +1,20 @@
+#include <stdio.h>
+#include <malloc.h>
+
+int stranger(int* nums, int numsSize) {
+	
+}
+
+int main() {
+	int num;
+	scanf("%d", &num);
+	int* nums = (int *)malloc(num * sizeof(int));
+	int i;
+	for (i = 0; i < num; i++) {
+		scanf("%d", &nums[i]);
+	}
+	int out_num = stranger(nums, num);
+	printf("%d\n", out_num);
+	free(nums);
+	return 0;
+}

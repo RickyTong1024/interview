@@ -1,0 +1,31 @@
+import java.io.*;
+import java.util.*;
+
+class Solution {
+    public void solveSudoku(char[][] board) {
+        
+    }
+}
+
+public class Main {
+	public static void main(String[] args) throws IOException {
+		char[][] board = new char[9][9];
+		Scanner cin = new Scanner(System.in);
+		for (int row = 0; row < 9; ++row) {
+			String s = cin.nextLine();
+			for (int col = 0; col < 9; ++col) {
+				board[row][col] = s.charAt(col);
+			}
+		}
+		cin.close();
+		Solution solution = new Solution();
+		solution.solveSudoku(board);
+		for (int row = 0; row < 9; ++row) {
+			String s = "";
+			for (int col = 0; col < 9; ++col) {
+				s = s + board[row][col];
+			}
+			System.out.println(s);
+		}
+	}
+}

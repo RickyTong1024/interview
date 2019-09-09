@@ -1,14 +1,19 @@
 <div class="panel panel-default">
     <div class="panel-body">
 		<div class="row">
-			<div class="col-sm-4">
+			<div class="col-sm-4 text-center">
 				面试进行中
 			</div>
-			<div class="col-sm-4">
+			<div class="col-sm-4 text-center">
 				时间: <span id="time"></span>
 			</div>
-			<div class="col-sm-4">
+			<div class="col-sm-4 text-center">
 				得分: {{ examination.get_score }}%
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12 text-center">
+				建议打开自己的IDE环境（vs, eclipse之类的编译工具），写完代码，跑通测试数据后再提交
 			</div>
 		</div>
     </div>

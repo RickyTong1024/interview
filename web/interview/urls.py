@@ -12,8 +12,11 @@ urlpatterns = [
     path('problem_submit/', views.problem_submit, name = 'problem_submit'),
     path('problem_view_submit/', views.problem_view_submit, name = 'problem_view_submit'),
     path('examinations/', views.examinations, name = 'examinations'),
-	path('examination_update/', views.examination_update, name = 'examination_update'),
+    path('examination_update/', views.examination_update, name = 'examination_update'),
     path('users/', views.users, name = 'users'),
-	path('user_update/', views.user_update, name = 'user_update'),
+    path('user_update/', views.user_update, name = 'user_update'),
     path('examination/', views.examination, name = 'examination'),
+    path('submissions/', views.submissions, name = 'submissions'),
+    path('submission/', views.submission, name = 'submission'),
+    path('submission_code/', views.submission_code, name = 'submission_code'),
 ]

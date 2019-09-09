@@ -1,0 +1,24 @@
+# -*- coding: utf-8 -*-
+
+class Solution(object):
+    def solveSudoku(self, board):
+        pass
+
+def main():
+    board = []
+    for row in range(9):
+        s = raw_input()
+        brow = []
+        for col in range(9):
+            brow.append(s[col])
+        board.append(brow)
+    solution = Solution()
+    solution.solveSudoku(board)
+    for row in range(9):
+        s = ''
+        for col in range(9):
+            s = s + board[row][col]
+        print s
+
+if __name__ == '__main__':
+    main()

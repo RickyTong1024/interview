@@ -33,7 +33,7 @@ class LoginForm(forms.Form):
             #如果成功返回对应的User对象，否则返回None(只是判断此用户是否存在，不判断是否is_active或者is_staff)
             if self.user_cache is None:
                 raise forms.ValidationError(u"您输入的用户名或密码不正确!")
-            elif not self.user_cache.is_active or not self.user_cache.is_staff:
+            elif not self.user_cache.is_active:
                 raise forms.ValidationError(u"您输入的用户名或密码不正确!")
             else:
                 login(self.request,self.user_cache)

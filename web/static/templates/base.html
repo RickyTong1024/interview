@@ -7,9 +7,56 @@
 		{% bootstrap_css %}
 		{% bootstrap_javascript %}
 		{% bootstrap_messages %}
-		<!-- Custom styles for this template -->
-		<!--link href="../signin.css" rel="stylesheet"-->
-		<link href="https://v3.bootcss.com/examples/signin/signin.css" rel="stylesheet">
+		<script type="text/javascript">
+		function getQueryString(name) {
+			 var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+			 var r = window.location.search.substr(1).match(reg);
+			 if(r!=null)return  unescape(r[2]); return null;
+		}
+		
+		function get_state(state, res) {
+			if (state == 0)
+			{
+				return "队列中";
+			}
+			else if (state == 1)
+			{
+				return "验证中";
+			}
+			else
+			{
+				if (res == -2)
+				{
+					return "编译错误";
+				}
+				else if (res == -1)
+				{
+					return "答案错误";
+				}
+				else if (res == 0)
+				{
+					return "答案正确";
+				}
+				else if (res == 1)
+				{
+					return "运行超时";
+				}
+				else if (res == 2)
+				{
+					return "运行超时";
+				}
+				else if (res == 3)
+				{
+					return "内存超界";
+				}
+				else if (res == 4)
+				{
+					return "运行错误";
+				}
+				return "系统错误";
+			}
+		}
+		</script>
 	</head>
 	<body style="background: #f6f6f6;">
 		<nav class="navbar navbar-default navbar-fixed-top" style="background: #016fad;">
@@ -17,10 +64,11 @@
 				<style type="text/css">
 				</style>
 				<ul class="nav navbar-nav navbar-right">
-					{% if user %}
+					{% if user.id %}
 					<li><a href="/" style="color: #ffffff; background-color: transparent;">我的面试</a></li>
 					{% if user.is_staff %}
 					<li><a href="/problem_list" style="color: #ffffff; background-color: transparent;">题目管理</a></li>
+					<li><a href="/submissions" style="color: #ffffff; background-color: transparent;">提交管理</a></li>
 					<li><a href="/examinations" style="color: #ffffff; background-color: transparent;">面试管理</a></li>
 					<li><a href="/users" style="color: #ffffff; background-color: transparent;">用户管理</a></li>
 					{% endif %}
@@ -37,7 +85,7 @@
 			</div>
 		</nav>
 			
-		<div class="container" style="margin-top:30px">
+		<div class="container" style="margin-top:100px">
 			{% if in_exam == 1 %}
 			{%include "templates/count_down.html" %}
 			{% endif %}
@@ -58,13 +106,7 @@
 			{% endblock %}
 		</div>
 	</body>
-	<script type="text/javascript">
-	function getQueryString(name) {
-		 var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
-		 var r = window.location.search.substr(1).match(reg);
-		 if(r!=null)return  unescape(r[2]); return null;
-	}
-	</script>
+	
 	{% block script %}
 	{% endblock %}
 </html>

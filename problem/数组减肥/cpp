@@ -1,0 +1,19 @@
+#include <iostream>
+
+using namespace std;
+
+class Solution {
+public :
+	int diet(int n) {
+		
+	}
+};
+
+int main() {
+	int in_num = 0;
+	cin >> in_num;
+	Solution solution;
+	int out_num = solution.diet(in_num);
+	cout << out_num << endl;
+	return 0;
+}

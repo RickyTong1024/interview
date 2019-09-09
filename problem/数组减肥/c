@@ -1,0 +1,13 @@
+#include <stdio.h>
+
+int diet(int n) {
+	
+}
+
+int main() {
+	int in_num;
+	scanf("%d", &in_num);
+	int out_num = diet(in_num);
+	printf("%d\n", out_num);
+	return 0;
+}

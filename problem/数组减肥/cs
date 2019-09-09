@@ -1,0 +1,21 @@
+using System;
+
+public class Solution
+{
+    public int diet(int n)
+    {
+        
+    }
+}
+
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        string s = Console.ReadLine();
+        int in_num = int.Parse(s);
+        Solution solution = new Solution();
+        int out_num = solution.diet(in_num);
+        Console.WriteLine(out_num);
+    }
+}

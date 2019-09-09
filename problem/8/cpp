@@ -1,0 +1,19 @@
+#include <iostream>
+
+using namespace std;
+
+class Solution {
+public :
+	string transfer(int m, int n) {
+		
+	}
+};
+
+int main() {
+	int m, n;
+	cin >> m >> n;
+	Solution solution;
+	string out_num = solution.transfer(m, n);
+	cout << out_num << endl;
+	return 0;
+}

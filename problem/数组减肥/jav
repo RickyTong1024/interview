@@ -1,0 +1,18 @@
+import java.io.*;
+import java.util.*;
+
+class Solution {
+	public int diet(int n) {
+		
+	}
+}
+
+public class Main {
+	public static void main(String[] args) throws IOException {
+		Scanner cin = new Scanner(System.in);
+		int in_num = cin.nextInt();
+		cin.close();
+		int out_num = diet(in_num);
+		System.out.println(out_num);
+	}
+}

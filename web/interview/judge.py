@@ -13,13 +13,18 @@ def compare_output(s):
 def judge():
     sm = submission_model.objects.filter(state__lte=1).order_by('id').first()
     if sm:
+        pm = problem_model.objects.filter(id=sm.problem_id).first()
+    if sm and pm:
         sm.state = 1
         sm.save()
 
         test_data = {
             'src' : sm.code,
             'lang' : sm.language,
+            "max_cpu_time" : pm.time_limit,
+            "max_memory" : pm.memory_limit * 1024,
             }
+        print(test_data)
         test_case_dir = os.path.join(settings.TEST_CASE_DIR, str(sm.problem_id))
         info_file = os.path.join(test_case_dir, 'info')
         with open(info_file, "r") as f:

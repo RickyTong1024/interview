@@ -1,0 +1,24 @@
+# -*- coding: utf-8 -*-
+
+class Solution(object):
+    def cave(self, board):
+        pass
+
+def main():
+    in_s = input()
+    in_s = in_s.split()
+    m = int(in_s[0])
+    n = int(in_s[1])
+    board = []
+    for y in range(n):
+        s = input()
+        brow = []
+        for x in range(m):
+            brow.append(s[x])
+        board.append(brow)
+    solution = Solution()
+    out_num = solution.cave(board)
+    print(out_num)
+
+if __name__ == '__main__':
+    main()

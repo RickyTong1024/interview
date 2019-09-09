@@ -7,26 +7,6 @@
 <h2>创建修改题目</h2>
 {% endblock %}
 
-{% block page_right %}
-<div class="row">
-	<div class="col-sm-4">
-		<label>难度</label>
-		<br>
-		<p class="text-primary">{{ problem.difficulty.name }}<p/>
-	</div>
-	<div class="col-sm-4">
-		<label>时间限制</label>
-		<br>
-		<p class="text-primary">{{ problem.time_limit }}ms<p/>
-	</div>
-	<div class="col-sm-4">
-		<label>内存限制</label>
-		<br>
-		<p class="text-primary">{{ problem.memory_limit }}MB<p/>
-	</div>
-</div>
-{% endblock %}
-
 {% block mainbody %}
 <form role="form" action="/problem_update/" method="post" enctype="multipart/form-data">
 	{% csrf_token %}
@@ -39,9 +19,7 @@
 	</div>
 	<div class="form-group">
 		<label for="name">description</label>
-		<script name="description" type="text/plain" id="container">
-			{{ problem.description | safe }}
-		</script>
+		<script name="description" type="text/plain" id="container">{{ problem.description | safe }}</script>
 		<script type="text/javascript" src="/static/ueditor/ueditor.config.js"></script>
 		<script type="text/javascript" src="/static/ueditor/ueditor.all.js"></script>
 		<script type="text/javascript">
@@ -60,7 +38,7 @@
 		<label for="name">难度</label>
 		<select class="form-control" name="difficulty">
 			{% for dif in difficulties %}
-			<option value="{{ dif.id }}">{{ dif.name }}</option>
+			<option value="{{ dif.id }}" {% if problem.difficulty.name == dif.name %}selected = "selected"{% endif %}>{{ dif.name }}</option>
 			{% endfor %}
 		</select>
 	</div>

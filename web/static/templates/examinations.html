@@ -26,7 +26,9 @@
 	<tbody>
 		{% for examination in contacts.object_list %}
 		<tr>
-			<th>{{ examination.name }}</th>
+			<th>
+				<a href="/submissions/?examination_id={{ examination.id }}">{{ examination.name }}</a>
+			</th>
 			<th>{{ examination.get_user.username }}</th>
 			<th>{{ examination.start_time|date:"Y-m-d H:i:s" }} ({{ examination.duration }}分钟)</th>
 			{% if examination.get_state == 0 %}

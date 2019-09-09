@@ -1,0 +1,13 @@
+#include <stdio.h>
+
+int delete_num(int n) {
+	
+}
+
+int main() {
+	int in_num;
+	scanf("%d", &in_num);
+	int out_num = delete_num(n);
+	printf("%d\n", out_num);
+	return 0;
+}

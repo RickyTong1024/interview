@@ -279,6 +279,8 @@ def problem_submit(request):
         if not _examination_sub_id:
             if not request.user.is_staff:
                 return HttpResponse(get_submission_json(None))
+            _examination_sub_id = 0
+            _examination_id = 0
         else:
             examination_sub = examination_sub_model.objects.filter(id=_examination_sub_id).first()
             if not examination_sub:
@@ -286,6 +288,7 @@ def problem_submit(request):
             examination = examination_model.objects.filter(id=examination_sub.examination_id).first()
             if not examination:
                 return HttpResponse(get_submission_json(None))
+            _examination_id = examination.id
             muser = user_model.objects.filter(id=examination.user_id).first()
             if not muser:
                 return HttpResponse(get_submission_json(None))
@@ -297,6 +300,7 @@ def problem_submit(request):
         sm = submission_model.objects.create(user_id = _user_id,
                                              problem_id=_problem_id,
                                              examination_sub_id=_examination_sub_id,
+                                             examination_id=_examination_id,
                                              language=_lang,
                                              code=_code,
                                              state=0)        
@@ -353,7 +357,7 @@ def examination_update(request):
         _username = request.POST.get('username', "")
         _name = request.POST.get('name', "")
         _start_time = request.POST.get('start_time', None)
-        _duration = request.POST.get('duration', 120)
+        _duration = request.POST.get('duration', 180)
         if _examination_id:
             examination = examination_model.objects.filter(id=_examination_id).first()
             if not examination:
@@ -430,8 +434,6 @@ def user_update(request):
 @login_required(login_url="/login/")  
 def examination(request):
     request.session.set_expiry(10800)
-    if not request.user.is_staff:
-        return redirect('/')
     if request.method == 'GET':
         _examination_id = request.GET.get('examination_id', None)
         if _examination_id:
@@ -453,3 +455,59 @@ def examination(request):
                            'page_list' : page_list,
                            'examination' : examination,
                            'in_exam' : 1})
+
+@login_required(login_url="/login/")  
+def submissions(request):
+    request.session.set_expiry(10800)
+    if not request.user.is_staff:
+        return redirect('/')
+    if request.method == 'GET':
+        _examination_id = request.GET.get('examination_id', None)
+        if _examination_id:
+            examination = examination_model.objects.filter(id=_examination_id).first()
+            if not examination:
+                return redirect('/')
+            submissions = submission_model.objects.filter(examination_id=_examination_id).order_by('-id')
+        else:
+            submissions = submission_model.objects.all().order_by('-id')
+                    
+        _page = request.GET.get('page', 1)
+        contacts, page_list = deal_page(submissions, _page)
+        return render(request, 'templates/submissions.html',
+                          {'user' : request.user,
+                           'contacts': contacts,
+                           'page_list' : page_list})
+
+@login_required(login_url="/login/")  
+def submission(request):
+    request.session.set_expiry(10800)
+    if not request.user.is_staff:
+        return redirect('/')
+    if request.method == 'GET':
+        _submission_id = request.GET.get('submission_id', None)
+        if _submission_id:
+            submission = submission_model.objects.filter(id=_submission_id).first()
+            if not submission:
+                return redirect('/')
+        else:
+            return redirect('/')
+
+        return render(request, 'templates/submission.html',
+                          {'user' : request.user,
+                           'submission': submission})
+
+@login_required(login_url="/login/")  
+def submission_code(request):
+    request.session.set_expiry(10800)
+    if not request.user.is_staff:
+        return HttpResponse('')
+    if request.method == 'POST':
+        _submission_id = request.POST.get('submission_id', None)
+        if _submission_id:
+            submission = submission_model.objects.filter(id=_submission_id).first()
+            if not submission:
+                return HttpResponse('')
+        else:
+            return HttpResponse('')
+
+        return HttpResponse(submission.code)

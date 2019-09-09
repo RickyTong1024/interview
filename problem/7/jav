@@ -1,0 +1,19 @@
+import java.io.*;
+import java.util.*;
+
+class Solution {
+	public int integerBreak(int in_num) {
+		
+	}
+}
+
+public class Main {
+	public static void main(String[] args) throws IOException {
+		Scanner cin = new Scanner(System.in);
+		int in_num = cin.nextInt();
+		cin.close();
+		Solution solution = new Solution();
+		int out_num = solution.integerBreak(in_num);
+		System.out.println(out_num);
+	}
+}

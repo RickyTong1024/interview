@@ -1,0 +1,78 @@
+{%extends "templates/base.html" %}
+{% block page_head %}
+<a href="/submissions">返回上级</a>
+{% endblock %}
+
+{% block page_left %}
+<h2>查看提交</h2>
+{% endblock %}
+
+{% block mainbody %}
+<div class="form-group">
+	<div>
+		<textarea class="form-control" id="code"></textarea>
+	</div>
+</div>
+{% endblock %}
+
+{% block script %}
+<link rel="stylesheet" href="/static/codemirror/codemirror.css">
+<script src="/static/codemirror/codemirror.js"></script>
+<script src="/static/codemirror/python.js"></script>
+<script src="/static/codemirror/clike.js"></script>
+<script src="/static/codemirror/matchbrackets.js"></script>
+<script type="text/javascript">
+var timer;
+var submission_id;
+var editor;
+$(document).ready(function() {
+	$.ajaxSetup({
+		data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+	});
+	var code = document.getElementById("code");
+	editor = CodeMirror.fromTextArea(code, {
+		lineNumbers: true,
+		matchBrackets: true,
+		indentUnit:4,
+		indentWithTabs: true,
+		readOnly: true,
+	});
+	editor.setSize("100%", 600);
+	var l = "{{ submission.language }}";
+	if (l == "c")
+	{
+		editor.setOption("mode", "text/x-csrc");
+	}
+	else if (l == "cpp")
+	{
+		editor.setOption("mode", "text/x-c++src");
+	}
+	else if (l == "cs")
+	{
+		editor.setOption("mode", "text/x-csharp");
+	}
+	else if (l == "jav")
+	{
+		editor.setOption("mode", "text/x-java");
+	}
+	else
+	{
+		editor.setOption("mode", "text/x-python");
+	}
+	get_code();
+});
+
+function get_code() {
+	$.ajax({
+		type: "POST",
+		url: "/submission_code/",
+		data: {
+			"submission_id":getQueryString("submission_id"),
+		},
+		success: function(data){
+			editor.setValue(data);
+		}
+	});
+}
+</script>
+{% endblock %}

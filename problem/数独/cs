@@ -1,0 +1,36 @@
+using System;
+
+public class Solution
+{
+    public void SolveSudoku(char[,] board)
+    {
+
+    }
+}
+
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        char[,] board = new char[9, 9];
+        for (int row = 0; row < 9; ++row)
+        {
+            string s = Console.ReadLine();
+            for (int col = 0; col < 9; ++col)
+            {
+                board[row, col] = s[col];
+            }
+        }
+        Solution solution = new Solution();
+        solution.SolveSudoku(board);
+        for (int row = 0; row < 9; ++row)
+        {
+            string s = "";
+            for (int col = 0; col < 9; ++col)
+            {
+                s += board[row, col];
+            }
+            Console.WriteLine(s);
+        }
+    }
+}

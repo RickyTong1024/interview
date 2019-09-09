@@ -1,0 +1,26 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+class Solution {
+public:
+	int stranger(vector<int>& nums) {
+		
+	}
+};
+
+int main() {
+	vector<int> arr;
+	int num;
+	cin >> num;
+	for (int i = 0; i < num; ++i) {
+		int tin;
+		cin >> tin;
+		arr.push_back(tin);
+	}
+	Solution solution;
+	int out_num = solution.stranger(arr);
+	cout << out_num << endl;
+	return 0;
+}

@@ -1,0 +1,23 @@
+# -*- coding: utf-8 -*-
+
+class Solution(object):
+    def pack(self, boxes):
+        pass
+
+def main():
+    in_num = input()
+    n = int(in_num)
+    boxes = []
+    for i in range(n):
+        in_s = input()
+        in_s = in_s.split()
+        box = []
+        for j in range(3):
+            box.append(int(in_s[j]))
+        boxes.append(box)
+    solution = Solution()
+    out_num = solution.pack(boxes)
+    print(out_num)
+
+if __name__ == '__main__':
+    main()

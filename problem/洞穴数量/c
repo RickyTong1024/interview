@@ -1,0 +1,24 @@
+#include <stdio.h>
+#include <malloc.h>
+
+int cave(char** board, int m, int n) {
+
+}
+
+int main() {
+	int m, n;
+	scanf("%d %d", &m, &n);
+	char **board = (char **)malloc(sizeof(char *) * n);
+	int x, y;
+	for (y = 0; y < n; y++) {
+		board[y] = (char *)malloc(sizeof(char) * m);
+		for (x = 0; x < m; x++) {
+			scanf("%c", &board[y][x]);
+		}
+		getchar();
+	}
+	int out_num = cave(board, m, n);
+	printf("%d\n", out_num);
+	free(board);
+	return 0;
+}

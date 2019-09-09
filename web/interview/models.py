@@ -34,7 +34,7 @@ class problem_model(models.Model):
     title = models.CharField(max_length=64)
     description = models.TextField()
     time_limit = models.IntegerField(default=1000)
-    memory_limit = models.IntegerField(default=32)
+    memory_limit = models.IntegerField(default=128)
     difficulty = models.ForeignKey(difficulty_model, on_delete=models.CASCADE, default=1)
     tags = models.ManyToManyField(tag_model)
     languages = models.ManyToManyField(language_model)
@@ -57,6 +57,7 @@ class submission_model(models.Model):
     user_id = models.IntegerField()
     problem_id = models.IntegerField()
     examination_sub_id = models.IntegerField()
+    examination_id = models.IntegerField()
     language = models.CharField(max_length=64)
     code = models.TextField()
     state = models.IntegerField(default=0)
@@ -64,6 +65,15 @@ class submission_model(models.Model):
     cpu = models.IntegerField(default=0)
     memory = models.IntegerField(default=0)
     create_time = models.DateTimeField(auto_now_add=True)
+
+    def get_problem(self):
+        return problem_model.objects.filter(id=self.problem_id).first()
+
+    def get_user(self):
+        return user_model.objects.filter(id=self.user_id).first()
+
+    def get_memory(self):
+        return int(self.memory / 1024)
 
     class Meta:
         db_table = "interview_submission"
@@ -87,7 +97,7 @@ class examination_model(models.Model):
     user_id = models.IntegerField()
     name = models.CharField(max_length=64)
     start_time = models.DateTimeField()
-    duration = models.IntegerField(default=120)
+    duration = models.IntegerField(default=180)
     subs = models.ManyToManyField(examination_sub_model)
 
     def get_state(self):

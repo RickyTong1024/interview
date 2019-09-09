@@ -1,0 +1,19 @@
+#include <iostream>
+
+using namespace std;
+
+class Solution {
+public :
+	int integerBreak(int in_num) {
+		
+	}
+};
+
+int main() {
+	int in_num;
+	cin >> in_num;
+	Solution solution;
+	int out_num = solution.integerBreak(in_num);
+	cout << out_num << endl;
+	return 0;
+}

@@ -1,0 +1,28 @@
+#include <stdio.h>
+#include <malloc.h>
+
+void solveSudoku(char** board, int boardRowSize, int boardColSize) {
+
+}
+
+int main() {
+	char **board = (char **)malloc(sizeof(char *) * 9);
+	int row, col;
+	for (row = 0; row < 9; row++) {
+		board[row] = (char *)malloc(sizeof(char) * 9);
+		for (col = 0; col < 9; col++) {
+			scanf("%c", &board[row][col]);
+		}
+		getchar();
+	}
+	solveSudoku(board, 9, 9);
+	for (row = 0; row < 9; row++) {
+		for (col = 0; col < 9; col++) {
+			printf("%c", board[row][col]);
+		}
+		free(board[row]);
+		printf("\n");
+	}
+	free(board);
+	return 0;
+}

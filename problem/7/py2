@@ -1,0 +1,15 @@
+# -*- coding: utf-8 -*-
+
+class Solution(object):
+	def integerBreak(self, n):
+		pass
+
+def main():
+	in_num = raw_input()
+	n = int(in_num)
+	solution = Solution()
+	out_num = solution.integerBreak(n)
+	print out_num
+
+if __name__ == '__main__':
+	main()

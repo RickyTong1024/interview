@@ -1,0 +1,19 @@
+#include <iostream>
+
+using namespace std;
+
+class Solution {
+public :
+	int add(int a, int b) {
+		return a + b;
+	}
+};
+
+int main() {
+	int a, b;
+	cin >> a >> b;
+	Solution solution;
+	int out_num = solution.add(a, b);
+	cout << out_num << endl;
+	return 0;
+}

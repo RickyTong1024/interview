@@ -65,7 +65,7 @@
 	</div>
 </div>
 <div class="form-group">
-	<button class="btn btn-primary btn-lg" onclick="submit();">提交</button>
+	<button class="btn btn-primary btn-lg" id="submit" onclick="submit();">提交</button>
 </div>
 <div class="form-group">
 	<pre id="result"></pre>
@@ -93,6 +93,7 @@ $(document).ready(function() {
 		indentUnit:4,
 		indentWithTabs: true,
 	});
+	editor.setSize("100%", 400);
 	$("#result").hide();
 	$("#language").change(get_lang);
 	get_lang();
@@ -151,39 +152,7 @@ function get_submit_data(data) {
 	}
 	else
 	{
-		var s = "";
-		if (res == -2)
-		{
-			s = s + "编译错误";
-		}
-		else if (res == -1)
-		{
-			s = s + "答案错误";
-		}
-		else if (res == 0)
-		{
-			s = s + "答案正确";
-		}
-		else if (res == 1)
-		{
-			s = s + "运行超时";
-		}
-		else if (res == 2)
-		{
-			s = s + "运行超时";
-		}
-		else if (res == 3)
-		{
-			s = s + "内存超界";
-		}
-		else if (res == 4)
-		{
-			s = s + "运行错误";
-		}
-		else
-		{
-			s = s + "系统错误";
-		}
+		var s = get_state(2, res)
 		s = s + "\n\n运行时间:" + cpu + "ms    内存使用:" + memory / 1024 + "k";
 		return s;
 	}
@@ -212,10 +181,8 @@ function submit() {
 			var state = get_submit_state(data);
 			var result = get_submit_data(data);
 			document.getElementById("result").innerText = result;
-			if (state != 2)
-			{
-				timer = window.setTimeout(view_submission, 3000);
-			}
+			timer = window.setTimeout(view_submission, 3000);
+			$("#submit").attr("disabled", true);
 		}
 	});
 }
@@ -234,8 +201,11 @@ function view_submission() {
 			document.getElementById("result").innerText = result;
 			if (state != 2)
 			{
-				alert(state);
 				timer = window.setTimeout(view_submission, 3000);
+			}
+			else
+			{
+				$("#submit").attr("disabled", false);
 			}
 		}
 	});

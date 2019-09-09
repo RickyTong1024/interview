@@ -1,0 +1,23 @@
+#include <stdio.h>
+#include <malloc.h>
+
+int pack(int** boxes, int n) {
+
+}
+
+int main() {
+	int n;
+	scanf("%d", &n);
+	int **boxes = (int **)malloc(sizeof(int *) * n);
+	int i, j;
+	for (i = 0; i < n; i++) {
+		boxes[i] = (int *)malloc(sizeof(int) * 3);
+		for (j = 0; j < 3; j++) {
+			scanf("%d", &boxes[i][j]);
+		}
+	}
+	int out_num = pack(boxes, n);
+	printf("%d\n", out_num);
+	free(boxes);
+	return 0;
+}

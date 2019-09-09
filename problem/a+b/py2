@@ -1,0 +1,17 @@
+# -*- coding: utf-8 -*-
+
+class Solution(object):
+	def add(self, a, b):
+		return a + b
+
+def main():
+	in_s = raw_input()
+	in_s = in_s.split()
+	a = int(in_s[0])
+	b = int(in_s[1])
+	solution = Solution()
+	out_num = solution.add(a, b)
+	print out_num
+
+if __name__ == '__main__':
+	main()

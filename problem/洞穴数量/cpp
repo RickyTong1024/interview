@@ -1,0 +1,30 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+class Solution {
+public:
+    int cave(vector<vector<char>>& board) {
+        
+    }
+};
+
+int main() {
+	int m, n;
+	cin >> m >> n;
+	vector<vector<char>> board;
+	char crow[1024];
+	for (int y = 0; y < n; ++y) {
+		cin >> crow;
+		vector<char> vrow;
+		for (int x = 0; x < m; ++x) {
+			vrow.push_back(crow[x]);
+		}
+		board.push_back(vrow);
+	}
+	Solution solution;
+	int out_num = solution.cave(board);
+	cout << out_num << endl;
+	return 0;
+}

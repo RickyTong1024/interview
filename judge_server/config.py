@@ -19,7 +19,7 @@ lang_config = {
     "cpp" : {
         "src_file" : "{ddir}/cpp/main.cpp",
         "exe_path" : "{ddir}/cpp/main",
-        "compile_cmd" : "g++ {src_file} -o {exe_path}",
+        "compile_cmd" : "g++ -std=c++11 {src_file} -o {exe_path}",
         "args" : "",
         "rule" : "c_cpp"
         },
@@ -28,9 +28,11 @@ lang_config = {
         "exe_path" : "/usr/bin/mono",
         "compile_cmd" : "mcs {src_file}",
         "args" : "{ddir}/cs/main.exe",
-        "rule" : None
+        "rule" : None,
+        "max_memory" : -1,
+        "memory_limit_check_only" : 1
         },
-    "java" : {
+    "jav" : {
         "src_file" : "{ddir}/jav/Main.java",
         "exe_path" : "/usr/bin/java",
         "compile_cmd" : "/usr/bin/javac {src_file}",
@@ -62,10 +64,12 @@ def get_max_cpu_time(max_cpu_time, cfg):
     
 def get_max_memory(max_memory, cfg):
     if "max_memory" in cfg.keys():
-        return cfg["max_memory"]
+        if cfg["max_memory"] == -1:
+            return -1
+        return cfg["max_memory"] * 1024
     if max_memory == None:
-        return default_max_memory
-    return max_memory
+        return default_max_memory * 1024
+    return max_memory * 1024
 
 def get_memory_limit_check_only(cfg):
     if "memory_limit_check_only" in cfg.keys():

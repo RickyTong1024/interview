@@ -1,9 +1,10 @@
 from __future__ import absolute_import
 import os, time
-from celery import Celery
+from celery import Celery, platforms
 
 # set the default Django settings module for the 'celery' program.
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'web.settings')
+platforms.C_FORCE_ROOT = True
 
 from django.conf import settings  # noqa
 
@@ -20,7 +21,10 @@ def judge_loop():
     django.setup()
     from interview.judge import judge
     while True:
-        judge()
+        try:
+            judge()
+        except Exception as e:
+            print(e)
         time.sleep(0.1)
 
 judge_loop.delay()

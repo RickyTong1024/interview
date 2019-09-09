@@ -1,0 +1,25 @@
+import java.io.*;
+import java.util.*;
+
+class Solution {
+    public int pack(int[][] boxes) {
+        
+    }
+}
+
+public class Main {
+	public static void main(String[] args) throws IOException {
+		Scanner cin = new Scanner(System.in);
+		int n = cin.nextInt();
+		int[][] boxes = new int[n][3];
+		for (int i = 0; i < n; ++i) {
+			for (int j = 0; j < 3; ++j) {
+				boxes[i][j] = cin.nextInt();
+			}
+		}
+		cin.close();
+		Solution solution = new Solution();
+		int out_num = solution.pack(boxes);
+		System.out.println(out_num);
+	}
+}

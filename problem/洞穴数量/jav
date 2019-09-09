@@ -1,0 +1,27 @@
+import java.io.*;
+import java.util.*;
+
+class Solution {
+    public int cave(char[][] board) {
+        
+    }
+}
+
+public class Main {
+	public static void main(String[] args) throws IOException {
+		Scanner cin = new Scanner(System.in);
+		int m = cin.nextInt();
+		int n = cin.nextInt();
+		char[][] board = new char[n][m];
+		for (int y = 0; y < n; ++y) {
+			String s = cin.nextLine();
+			for (int x = 0; x < m; ++x) {
+				board[y][x] = s.charAt(x);
+			}
+		}
+		cin.close();
+		Solution solution = new Solution();
+		int out_num = solution.cave(board);
+		System.out.println(out_num);
+	}
+}

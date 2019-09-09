@@ -31,7 +31,11 @@
 			</th>
 			<th>{{ sub.get_problem.difficulty.name }}</th>
 			<th>{{ sub.get_total_submission }}</th>
-			<th>{% if sub.result == 0 %}Yes{% else %}No{% endif %}</th>
+			{% if sub.result == 0 %}
+			<th><span name="res" class="label label-success">通过</span></th>
+			{% else %}
+			<th><span name="res" class="label label-danger">未通过</span></th>
+			{% endif %}
 		</tr>
 		{% endfor %}
 	</tbody>

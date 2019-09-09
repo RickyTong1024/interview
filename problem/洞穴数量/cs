@@ -1,0 +1,31 @@
+using System;
+
+public class Solution
+{
+    public int cave(char[,] board)
+    {
+
+    }
+}
+
+public class Program
+{
+    public static void Main(string[] args)
+    {
+		string[] sarray = Console.ReadLine().Split(' ');
+        int m = int.Parse(sarray[0]);
+        int n = int.Parse(sarray[1]);
+        char[,] board = new char[n, m];
+        for (int y = 0; y < n; ++y)
+        {
+            string s = Console.ReadLine();
+            for (int x = 0; x < m; ++x)
+            {
+                board[y, x] = s[x];
+            }
+        }
+        Solution solution = new Solution();
+        int out_num = solution.cave(board);
+        Console.WriteLine(out_num);
+    }
+}

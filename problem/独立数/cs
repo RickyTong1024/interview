@@ -1,0 +1,28 @@
+using System;
+
+public class Solution
+{
+    public int stranger(int[] nums)
+    {
+        
+    }
+}
+
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        string snum = Console.ReadLine();
+        int num = int.Parse(snum);
+        string snums = Console.ReadLine();
+        int[] nums = new int[num];
+        string[] arr = snums.Split(' ');
+        for (int i = 0; i < num; ++i)
+        {
+            nums[i] = int.Parse(arr[i]);
+        }
+        Solution solution = new Solution();
+        int out_num = solution.stranger(nums);
+        Console.WriteLine(out_num);
+    }
+}

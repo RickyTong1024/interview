@@ -1,0 +1,33 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+class Solution {
+public:
+    void solveSudoku(vector<vector<char>>& board) {
+        
+    }
+};
+
+int main() {
+	vector<vector<char>> board;
+	char crow[10];
+	for (int row = 0; row < 9; ++row) {
+		cin >> crow;
+		vector<char> vrow;
+		for (int col = 0; col < 9; ++col) {
+			vrow.push_back(crow[col]);
+		}
+		board.push_back(vrow);
+	}
+	Solution solution;
+	solution.solveSudoku(board);
+	for (int row = 0; row < 9; ++row) {
+		for (int col = 0; col < 9; ++col) {
+			cout << board[row][col];
+		}
+		cout << endl;
+	}
+	return 0;
+}

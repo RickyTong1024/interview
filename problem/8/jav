@@ -1,0 +1,20 @@
+import java.io.*;
+import java.util.*;
+
+class Solution {
+	public String transfer(int m, int n) {
+		
+	}
+}
+
+public class Main {
+	public static void main(String[] args) throws IOException {
+		Scanner cin = new Scanner(System.in);
+		int m = cin.nextInt();
+		int n = cin.nextInt();
+		cin.close();
+		Solution solution = new Solution();
+		String out_num = solution.transfer(m, n);
+		System.out.println(out_num);
+	}
+}

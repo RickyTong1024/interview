@@ -1,0 +1,22 @@
+using System;
+
+public class Solution
+{
+    public string transfer(int m, int n)
+    {
+        
+    }
+}
+
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        string[] sarray = Console.ReadLine().Split(' ');
+        int m = int.Parse(sarray[0]);
+        int n = int.Parse(sarray[1]);
+        Solution solution = new Solution();
+        string out_num = solution.transfer(m, n);
+        Console.WriteLine(out_num);
+    }
+}
