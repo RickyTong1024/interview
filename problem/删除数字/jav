@@ -12,7 +12,8 @@ public class Main {
 		Scanner cin = new Scanner(System.in);
 		int in_num = cin.nextInt();
 		cin.close();
-		int out_num = delete_num(in_num);
+		Solution solution = new Solution();
+		int out_num = solution.delete_num(in_num);
 		System.out.println(out_num);
 	}
 }
